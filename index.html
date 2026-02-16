@@ -1,0 +1,425 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  ShoppingBag, 
+  Zap, 
+  ShieldCheck, 
+  Search, 
+  Menu, 
+  X, 
+  ArrowRight, 
+  Star, 
+  Clock, 
+  Smartphone,
+  CheckCircle,
+  ExternalLink,
+  Tag,
+  Laptop,
+  Home,
+  Coffee,
+  Watch
+} from 'lucide-react';
+
+const App = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('Todos');
+
+  // Efecto para el navbar al hacer scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const categories = [
+    { name: 'Todos', icon: <Tag size={16} /> },
+    { name: 'Tecnología', icon: <Laptop size={16} /> },
+    { name: 'Hogar', icon: <Home size={16} /> },
+    { name: 'Estilo de vida', icon: <Coffee size={16} /> },
+    { name: 'Accesorios', icon: <Watch size={16} /> }
+  ];
+
+  const products = [
+    {
+      id: 1,
+      category: "Tecnología",
+      title: "Auriculares Noise Cancelling Sony XM5",
+      description: "La mejor cancelación de ruido del mercado. Ideal para trabajar o viajar con total concentración.",
+      price: "349.00",
+      rating: 4.9,
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+      tag: "Top Ventas"
+    },
+    {
+      id: 2,
+      category: "Hogar",
+      title: "Cafetera Espresso Inteligente",
+      description: "Café de especialidad en casa con solo un toque. Programable desde tu smartphone.",
+      price: "159.99",
+      rating: 4.8,
+      image: "https://images.unsplash.com/photo-1541167760496-162955ed8a9f?auto=format&fit=crop&q=80&w=800",
+      tag: "Recomendado"
+    },
+    {
+      id: 3,
+      category: "Tecnología",
+      title: "Monitor Curvo UltraWide 34\"",
+      description: "Optimiza tu espacio de trabajo. Perfecto para multitarea y gaming inmersivo.",
+      price: "429.00",
+      rating: 4.7,
+      image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80&w=800",
+      tag: "Mejor Valor"
+    },
+    {
+      id: 4,
+      category: "Accesorios",
+      title: "Apple Watch Series 9",
+      description: "Tu compañero de salud y productividad. Monitoreo avanzado y diseño impecable.",
+      price: "399.00",
+      rating: 4.9,
+      image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=800",
+      tag: "Nuevo"
+    },
+    {
+      id: 5,
+      category: "Hogar",
+      title: "Purificador de Aire Inteligente",
+      description: "Elimina el 99% de alérgenos. Control por voz y modo ultra silencioso.",
+      price: "129.00",
+      rating: 4.6,
+      image: "https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&q=80&w=800",
+      tag: "Ecológico"
+    },
+    {
+      id: 6,
+      category: "Estilo de vida",
+      title: "Mochila Antirrobo Impermeable",
+      description: "Diseño minimalista con puerto USB. Ideal para el nómada digital moderno.",
+      price: "55.00",
+      rating: 4.8,
+      image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800",
+      tag: "Más Deseado"
+    }
+  ];
+
+  const filteredProducts = activeCategory === 'Todos' 
+    ? products 
+    : products.filter(p => p.category === activeCategory);
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-indigo-100 selection:text-indigo-900">
+      
+      {/* --- NAVBAR --- */}
+      <nav 
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+          <div className="flex items-center gap-2 cursor-pointer group">
+            <div className={`p-1.5 rounded-lg transition-colors shadow-sm ${isScrolled ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-600'}`}>
+              <ShoppingBag size={20} />
+            </div>
+            <span className={`text-xl font-black tracking-tighter ${isScrolled ? 'text-slate-900' : 'text-white'}`}>
+              CHOLLOZE<span className="text-indigo-500">SHOP</span>
+            </span>
+          </div>
+
+          {/* Desktop Search Simulado */}
+          <div className="hidden lg:flex flex-grow max-w-md mx-10">
+            <div className="relative w-full">
+              <input 
+                type="text" 
+                placeholder="Busca el chollo de hoy..." 
+                className={`w-full py-2 pl-10 pr-4 rounded-full text-sm border focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all ${
+                  isScrolled ? 'bg-slate-100 border-transparent' : 'bg-white/10 border-white/20 text-white placeholder-white/60'
+                }`}
+              />
+              <Search size={16} className={`absolute left-3 top-2.5 ${isScrolled ? 'text-slate-400' : 'text-white/60'}`} />
+            </div>
+          </div>
+
+          {/* Desktop Links */}
+          <div className={`hidden md:flex items-center gap-6 text-sm font-semibold ${isScrolled ? 'text-slate-600' : 'text-white/90'}`}>
+            <a href="#store" className="hover:text-indigo-500 transition-colors">Tienda</a>
+            <a href="#deals" className="hover:text-indigo-500 transition-colors">Ofertas Flash</a>
+            <button className={`px-6 py-2.5 rounded-full transition-all transform hover:scale-105 flex items-center gap-2 font-bold ${
+              isScrolled 
+                ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md shadow-indigo-200' 
+                : 'bg-white text-slate-900 hover:bg-slate-100 shadow-xl'
+            }`}>
+              Ir a Amazon <ExternalLink size={14} />
+            </button>
+          </div>
+
+          {/* Mobile Toggle */}
+          <button 
+            className={`md:hidden p-2 ${isScrolled ? 'text-slate-900' : 'text-white'}`}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="absolute top-full left-0 w-full bg-white border-b border-slate-100 p-6 md:hidden flex flex-col gap-4 shadow-2xl animate-in fade-in slide-in-from-top-4">
+            <div className="relative mb-2">
+              <input type="text" placeholder="Buscar productos..." className="w-full bg-slate-100 border-transparent py-3 pl-10 rounded-xl text-sm" />
+              <Search size={18} className="absolute left-3 top-3 text-slate-400" />
+            </div>
+            <a href="#store" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-slate-800 py-2 border-b border-slate-50">Tienda</a>
+            <a href="#deals" onClick={() => setMobileMenuOpen(false)} className="text-lg font-bold text-slate-800 py-2 border-b border-slate-50">Ofertas Flash</a>
+            <button className="bg-indigo-600 text-white py-4 rounded-xl font-bold mt-2 shadow-lg shadow-indigo-100">
+              Ver Chollos en Amazon
+            </button>
+          </div>
+        )}
+      </nav>
+
+      {/* --- HERO SECTION --- */}
+      <header className="relative pt-40 pb-32 md:pt-60 md:pb-48 px-6 overflow-hidden isolate">
+        <img 
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1920" 
+          alt="Shopping online" 
+          className="absolute inset-0 -z-20 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-900 via-slate-900/80 to-slate-900/40" />
+
+        <div className="max-w-7xl mx-auto relative z-10 text-left md:text-center lg:text-left flex flex-col lg:items-start md:items-center">
+          <div className="inline-flex items-center gap-2 bg-indigo-500/20 backdrop-blur-md text-indigo-300 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-white/10">
+            <Zap size={14} fill="currentColor" /> Tu Shopping Personal en Amazon
+          </div>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] mb-6 drop-shadow-xl max-w-4xl">
+            Deja de buscar.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-white to-indigo-100">
+              Empieza a encontrar.
+            </span>
+          </h1>
+          <p className="text-lg md:text-xl text-slate-200 mb-10 max-w-2xl leading-relaxed drop-shadow-sm font-medium">
+            En <span className="text-white font-bold">ChollozeShop</span> filtramos las mejores ofertas de Amazon por ti. 
+            Calidad garantizada, tecnología de vanguardia y precios que no verás dos veces.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+            <button className="w-full sm:w-auto bg-indigo-600 text-white px-10 py-4 rounded-full font-black hover:bg-indigo-500 transition-all flex items-center justify-center gap-2 shadow-2xl shadow-indigo-600/30 transform hover:-translate-y-1">
+              Ver Chollos de Hoy <ArrowRight size={20} />
+            </button>
+            <button className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white border border-white/30 px-10 py-4 rounded-full font-bold hover:bg-white/20 transition-all flex items-center justify-center gap-2">
+              Explorar Categorías
+            </button>
+          </div>
+          
+          <div className="mt-12 flex flex-wrap items-center gap-6 text-sm text-slate-300 font-semibold justify-center lg:justify-start">
+            <span className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/5"><ShieldCheck size={18} className="text-emerald-400"/> Vendedor Afiliado Oficial</span>
+            <span className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-lg border border-white/5"><Star size={18} className="text-amber-400"/> Curaduría Experta</span>
+          </div>
+        </div>
+      </header>
+
+      {/* --- CATEGORY SELECTOR --- */}
+      <section id="store" className="py-12 bg-white sticky top-[64px] md:top-[76px] z-40 border-b border-slate-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar scroll-smooth">
+            {categories.map((cat) => (
+              <button
+                key={cat.name}
+                onClick={() => setActiveCategory(cat.name)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold whitespace-nowrap transition-all border ${
+                  activeCategory === cat.name 
+                  ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100' 
+                  : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-indigo-300 hover:text-indigo-600'
+                }`}
+              >
+                {cat.icon} {cat.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- STORE GRID --- */}
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between mb-10">
+          <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+            <div className="w-1 h-8 bg-indigo-600 rounded-full"></div>
+            Nuestros Hallazgos {activeCategory !== 'Todos' && `en ${activeCategory}`}
+          </h2>
+          <div className="text-sm font-medium text-slate-400 hidden sm:block">
+            Mostrando {filteredProducts.length} productos seleccionados
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProducts.map((product) => (
+            <div key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border border-slate-100 flex flex-col h-full transform hover:-translate-y-2">
+              <div className="relative overflow-hidden aspect-[1/1] sm:aspect-[4/3]">
+                <img 
+                  src={product.image} 
+                  alt={product.title} 
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute top-4 left-4 flex flex-col gap-2">
+                  <div className="bg-white/95 backdrop-blur text-[10px] font-black px-3 py-1 rounded-lg uppercase tracking-widest text-indigo-600 shadow-xl border border-indigo-50">
+                    {product.tag}
+                  </div>
+                </div>
+                {/* Overlay Hover */}
+                <div className="absolute inset-0 bg-indigo-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                   <button className="bg-white text-slate-900 px-6 py-3 rounded-full font-bold shadow-2xl scale-90 group-hover:scale-100 transition-transform flex items-center gap-2">
+                      Ver Detalles <ArrowRight size={16} />
+                   </button>
+                </div>
+              </div>
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[11px] font-bold text-indigo-500 uppercase tracking-[0.2em]">{product.category}</span>
+                  <div className="flex items-center text-amber-500 text-xs font-bold gap-1 bg-amber-50 px-2 py-1 rounded-md">
+                    <Star size={12} fill="currentColor" /> {product.rating}
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-3 leading-snug group-hover:text-indigo-600 transition-colors">
+                  {product.title}
+                </h3>
+                <p className="text-slate-500 text-sm mb-8 flex-grow leading-relaxed">
+                  {product.description}
+                </p>
+                
+                <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-50">
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-black text-slate-900">${product.price}</span>
+                    <span className="text-[10px] text-emerald-500 font-bold flex items-center gap-1">
+                       <CheckCircle size={10} /> Precio Verificado
+                    </span>
+                  </div>
+                  <button className="bg-slate-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-indigo-600 transition-all flex items-center gap-2 group-hover:px-8">
+                    Comprar <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* --- TRUST BANNER --- */}
+      <section id="deals" className="bg-white py-20 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 text-center">
+          <div className="p-6">
+            <div className="text-indigo-600 mb-4 flex justify-center"><Zap size={40} /></div>
+            <h4 className="font-black text-lg mb-2">Ofertas Flash</h4>
+            <p className="text-sm text-slate-500">Detectamos bajadas de precio en tiempo real.</p>
+          </div>
+          <div className="p-6">
+            <div className="text-indigo-600 mb-4 flex justify-center"><ShieldCheck size={40} /></div>
+            <h4 className="font-black text-lg mb-2">Review Real</h4>
+            <p className="text-sm text-slate-500">Solo listamos productos con reviews de usuarios reales.</p>
+          </div>
+          <div className="p-6">
+            <div className="text-indigo-600 mb-4 flex justify-center"><ShoppingBag size={40} /></div>
+            <h4 className="font-black text-lg mb-2">Variedad</h4>
+            <p className="text-sm text-slate-500">Desde tech hasta hogar, lo mejor de cada mundo.</p>
+          </div>
+          <div className="p-6">
+            <div className="text-indigo-600 mb-4 flex justify-center"><Clock size={40} /></div>
+            <h4 className="font-black text-lg mb-2">Actualización Diaria</h4>
+            <p className="text-sm text-slate-500">Si hay un chollo hoy, está en ChollozeShop.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* --- CTA / NEWSLETTER --- */}
+      <section className="py-24 bg-slate-900 px-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-indigo-600/10 skew-x-12 transform translate-x-1/2"></div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-block p-4 bg-indigo-600 rounded-3xl mb-8 shadow-2xl shadow-indigo-600/40">
+            <Tag size={32} className="text-white" />
+          </div>
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-6 tracking-tight">
+            ¿Buscas un producto específico?
+          </h2>
+          <p className="text-slate-400 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+            Suscríbete a nuestra alerta de <span className="text-white font-bold">Alertas de Chollos</span> y te avisaremos cuando el precio baje de tu presupuesto.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+            <input 
+              type="email" 
+              placeholder="Tu mejor email..." 
+              className="flex-grow px-8 py-5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white/10 transition-all font-medium"
+            />
+            <button className="bg-indigo-600 text-white px-10 py-5 rounded-2xl font-black hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-600/20 active:scale-95">
+              Unirme Ahora
+            </button>
+          </div>
+          <p className="text-xs text-slate-500 mt-6 font-medium">
+            Únete a la comunidad de ahorradores inteligentes. Sin spam, solo chollos.
+          </p>
+        </div>
+      </section>
+
+      {/* --- FOOTER --- */}
+      <footer className="bg-white border-t border-slate-100 pt-20 pb-10 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="bg-indigo-600 text-white p-1.5 rounded-lg">
+                  <ShoppingBag size={20} />
+                </div>
+                <span className="text-2xl font-black text-slate-900 tracking-tighter">
+                  CHOLLOZE<span className="text-indigo-600">SHOP</span>
+                </span>
+              </div>
+              <p className="text-slate-500 max-w-sm text-sm leading-relaxed font-medium mb-8">
+                Tu destino definitivo para encontrar productos excepcionales en Amazon. Curamos tecnología, hogar y estilo de vida con un ojo crítico para que tú solo disfrutes de la compra.
+              </p>
+              <div className="flex gap-4">
+                {/* Social icons placeholder */}
+                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer">
+                  <Laptop size={18} />
+                </div>
+                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer">
+                  <Smartphone size={18} />
+                </div>
+                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white transition-all cursor-pointer">
+                  <Watch size={18} />
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="font-black text-slate-900 mb-6 uppercase text-xs tracking-[0.2em]">Tienda</h4>
+              <ul className="space-y-3 text-sm font-semibold text-slate-500">
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Tecnología</a></li>
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Hogar Inteligente</a></li>
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Office Setup</a></li>
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Chollos del Día</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-black text-slate-900 mb-6 uppercase text-xs tracking-[0.2em]">Información</h4>
+              <ul className="space-y-3 text-sm font-semibold text-slate-500">
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Sobre Nosotros</a></li>
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Afiliación Amazon</a></li>
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Privacidad</a></li>
+                <li><a href="#" className="hover:text-indigo-600 transition-colors">Contacto</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-slate-100 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center md:text-left">
+            <p>&copy; 2024 ChollozeShop. El arte de comprar inteligente.</p>
+            <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-lg border border-slate-100">
+              <ExternalLink size={12} className="text-indigo-500" /> 
+              <span>Como afiliados de Amazon, percibimos ingresos por compras adscritas.</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
